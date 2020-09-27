@@ -1,0 +1,11 @@
+using System;
+
+class MainClass {
+  public static void Main () {
+
+    Gravar cad = new Gravar(); // INSTANCIAR A CLASSE
+    cad.gravartxt(); //CHAMAR A FUNÇÃO
+   
+ 
+  }
+}

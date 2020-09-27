@@ -1,0 +1,124 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+using System.Text;
+using System.Globalization;
+
+public class Gravar{ 
+   //DECLARAR O TIPO DAS VARIAVEIS QUE RECEBERÃO O ARQUIVO
+   StreamWriter x,escrita;
+
+  public void gravartxt(){  
+
+      //BUSCANDO DATA ATUAL
+     // DateTime thisDay = DateTime.Today;    
+     DateTime thisDay = DateTime.Now;
+     Console.WriteLine(thisDay.ToString("u"));
+
+
+    //DECLARAÇÃO DE VARIÁVEIS
+    string cpfDigitado,empresa,nome,contato,email,categoria_de_servico;
+    bool cpfValidado;
+    int executa = 1;
+    bool retornoCad; 
+   
+
+  //INSTANCIADO A CLASSE
+    ValidaCPF valida = new ValidaCPF();
+    Consulta cons = new Consulta();
+     
+
+    //PASSANDO O CAMINHO DO ARQUIVO EXISTENTE
+    string arquivo = @"profissional.txt";
+
+    //SE O ARQUIVO EXISTIR ELE NÃO VAI CRIAR NOVAMENTE
+     if (File.Exists(arquivo)) {
+         
+        Console.WriteLine ("O arquivo já existe"); 
+        escrita = File.AppendText(arquivo);
+        
+
+    }else{
+       //CRIAR ARQUIVO 
+       StreamWriter escrita = new StreamWriter("profissional.txt");
+
+    }   
+   
+    while (executa != 0){  
+
+    //LENDO O CPF DIGITADO   
+    Console.WriteLine ("Qual o número do seu CPF");
+    cpfDigitado = Console.ReadLine();
+    cpfValidado = (valida.IsCpf(cpfDigitado) ) ;    
+
+
+    //VALIDANDO O CPF
+    if (cpfValidado == true){
+
+      //VERIFICAR SE JÁ EXISTE CADASTRO DE ENTREGA COM ESTE CPF
+      retornoCad = cons.consulta(cpfDigitado);
+     
+
+      if (retornoCad == true){
+
+        Console.WriteLine("JÁ EXISTE ESTE CADASTRO!");
+      
+
+      }else{
+        
+         
+      Console.WriteLine ("Digite o nome da empresa");
+      empresa = Console.ReadLine();
+      Console.WriteLine ("Digite o nome do professional");
+      nome = Console.ReadLine();
+      Console.WriteLine ("Digite o contato");
+      contato = Console.ReadLine();
+      Console.WriteLine ("Digite o email");
+      email = Console.ReadLine();
+      Console.WriteLine ("Digite a categoria de servico");
+      categoria_de_servico = Console.ReadLine();  
+
+
+      //ESCREVER NO ARQUIVO
+      escrita.WriteLine(cpfDigitado + ";"+ nome + ";" + empresa +";" + contato +";" + email +";" + categoria_de_servico +";"+ thisDay.ToString("u")) ;
+
+      Console.WriteLine ("Cadastro de profissional efetuado : {0}",empresa);
+      
+      //PERGUNTANDO SE DESEJA CADASTRAR MAIS PROFISSIONAIS
+      Console.WriteLine ("Deseja cadastrar novamente ? 1 para SIM | 0 - Para Não ");
+      executa = int.Parse(Console.ReadLine());
+
+      //SALVANDO E FECHANDO O ARQUIVO A CADA INSERÇÃO DE CPF
+      escrita.Close();  
+      Console.ReadKey();
+        
+        
+      }
+
+
+
+    }else if(cpfValidado == false){
+
+      Console.WriteLine ("CPF INVÁLIDO!");
+
+    }else{
+      Console.WriteLine ("ERRO AO VALIDAR CPF!");
+    }  
+
+
+   }
+
+    cons.exibirCadastro();
+
+  
+  }
+
+    
+
+
+  
+
+ 
+
+}
